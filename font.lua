@@ -291,21 +291,28 @@ NameInput:GetPropertyChangedSignal("Text"):Connect(refresh)
 
 local function MakeDraggable(ui)
     local dragging, dragInput, dragStart, startPos
+    
     ui.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true; dragStart = input.Position; startPos = ui.Position
-            local releaseEvent
-            releaseEvent = UserInputService.InputEnded:Connect(function(release)
-                if release.UserInputType == Enum.UserInputType.MouseButton1 then
-                    dragging = false; releaseEvent:Disconnect()
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = ui.Position
+            local release = UserInputService.InputEnded:Connect(function(release)
+                if release.UserInputType == Enum.UserInputType.MouseButton1 or release.UserInputType == Enum.UserInputType.Touch then
+                    dragging = false
+                    release:Disconnect()
                 end
             end)
         end
     end)
+    
     ui.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
     end)
-    RunService.RenderStepped:Connect(function()
+    
+    RunService.Heartbeat:Connect(function()
         if dragging and dragInput then
             local delta = dragInput.Position - dragStart
             ui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
@@ -316,3 +323,5 @@ end
 MakeDraggable(MainFrame)
 MakeDraggable(LogoBtn)
 LogoBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+LogoBtn.TouchTap:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+
