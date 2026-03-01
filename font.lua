@@ -279,7 +279,36 @@ CycleBtn.MouseButton1Click:Connect(function()
     SetCycle(not cycleActive)
     CycleBtn.Text = cycleActive and "AUTO CYCLE: ON" or "AUTO CYCLE: OFF"
     CycleBtn.TextColor3 = cycleActive and ACCENT or Color3.new(1,1,1)
+end)local UIS = UserInputService
+
+local function Drag(obj)
+    local drag, start, startPos
+    obj.InputBegan:Connect(function(i) 
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then 
+            drag = true 
+            start = i.Position 
+            startPos = obj.Position 
+        end 
+    end)
+    UIS.InputChanged:Connect(function(i) 
+        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then 
+            local delta = i.Position - start
+            obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end 
+    end)
+    UIS.InputEnded:Connect(function(i) 
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then 
+            drag = false 
+        end 
+    end)
+end
+
+Drag(MainFrame)
+Drag(LogoBtn)
+LogoBtn.MouseButton1Click:Connect(function() 
+    MainFrame.Visible = not MainFrame.Visible 
 end)
+
 
 ApplyBtn.MouseButton1Click:Connect(function()
     pcall(function()
@@ -288,40 +317,4 @@ ApplyBtn.MouseButton1Click:Connect(function()
 end)
 
 NameInput:GetPropertyChangedSignal("Text"):Connect(refresh)
-
-local function MakeDraggable(ui)
-    local dragging, dragInput, dragStart, startPos
-    
-    ui.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStart = input.Position
-            startPos = ui.Position
-            local release = UserInputService.InputEnded:Connect(function(release)
-                if release.UserInputType == Enum.UserInputType.MouseButton1 or release.UserInputType == Enum.UserInputType.Touch then
-                    dragging = false
-                    release:Disconnect()
-                end
-            end)
-        end
-    end)
-    
-    ui.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            dragInput = input
-        end
-    end)
-    
-    RunService.Heartbeat:Connect(function()
-        if dragging and dragInput then
-            local delta = dragInput.Position - dragStart
-            ui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end)
-end
-
-MakeDraggable(MainFrame)
-MakeDraggable(LogoBtn)
-LogoBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
-LogoBtn.TouchTap:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
 
