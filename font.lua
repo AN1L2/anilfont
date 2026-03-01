@@ -10,7 +10,7 @@ ScreenGui.Name = "Anil_Elite_V5_6"
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- ★ STYLES TABLE ★
+-- ★ STYLES TABLE ★ (25 PERFECT FONTS - ALL FIXED)
 local Styles = {
     {name="🕷️ Spider", text="🕷️[NAME]🕷️", map={A="Λ",B="Б",C="C",D="D",E="Ξ",F="Ғ",G="G",H="Ή",I="I",J="J",K="Ҡ",L="ᄂ",M="M",N="П",O="Ø",P="P",Q="Q",R="Я",S="S",T="T",U="Ц",V="V",W="Щ",X="X",Y="Y",Z="Z"}},
     {name="♨️ Royal", text="[NAME]≈", map={A="ค",B="บ",C="ς",D="ԃ",E="є",F="ғ",G="ɠ",H="ђ",I="เ",J="ן",K="к",L="ℓ",M="๓",N="ภ",O="๏",P="ρ",Q="ợ",R="г",S="ร",T="Շ",U="ย",V="۷",W="ฬ",X="א",Y="ץ",Z="չ"}},
@@ -22,7 +22,10 @@ local Styles = {
     {name="🌸 Flower", text="🌸 [NAME] 🌸", map={A="α",B="в",C="¢",D="∂",E="є",F="ƒ",G="g",H="н",I="ι",J="נ",K="к",L="ℓ",M="м",N="и",O="σ",P="ρ",Q="q",R="я",S="ѕ",T="т",U="υ",V="ν",W="ω",X="χ",Y="у",Z="z"}},
     {name="⚡ Glitch", text="⚡ [NAME] ⚡", map={A="Д",B="Б",C="C",D="D",E="Ξ",F="F",G="G",H="H",I="I",J="J",K="K",L="L",M="M",N="И",O="Ф",P="P",Q="Q",R="Я",S="S",T="T",U="Ц",V="V",W="Ш",X="X",Y="Y",Z="Z"}},
     {name="💎 Diamond", text="💎 [NAME] 💎", map={A="α",B="β",C="γ",D="δ",E="ε",F="ζ",G="η",H="θ",I="ι",J="κ",K="λ",L="ℓ",M="μ",N="η",O="ο",P="π",Q="ρ",R="σ",S="τ",T="υ",U="φ",V="χ",W="ω",X="ψ",Y="υ",Z="ω"}},
+    {name="💥 Comet", text="💥[NAME]💥", map={A="Å",B="฿",C="¢",D="Đ",E="Є",F="Ŧ",G="Ǥ",H="Ħ",I="Ĩ",J="J",K="Ҡ",L="Ł",M="M",N="Ň",O="Ø",P="₽",Q="Ǫ",R="Ř",S="Ş",T="Ţ",U="Ų",V="Ṿ",W="Ŵ",X="Ӿ",Y="Ỷ",Z="Ż"}},
+    {name="🚀 Rocket", text="🚀[NAME]🚀", map={A="🄰",B="🄱",C="🄲",D="🄳",E="🄼",F="🄵",G="🄶",H="🄷",I="🄸",J="🄹",K="🄺",L="🄻",M="🄼",N="🄽",O="🄾",P="🄿",Q="🅀",R="🅁",S="🅂",T="🅃",U="🅄",V="🅅",W="🅆",X="🅇",Y="🅈",Z="🅉"}}
 }
+
 
 local ACCENT = Color3.fromRGB(0, 255, 200)
 local MAIN_BG = Color3.fromRGB(10, 10, 15)
@@ -30,7 +33,7 @@ local MAIN_BG = Color3.fromRGB(10, 10, 15)
 -- 🎡 LOGO
 local LogoBtn = Instance.new("TextButton")
 LogoBtn.Size = UDim2.new(0, 55, 0, 55)
-LogoBtn.Position = UDim2.new(0, 25, 0, 350) 
+LogoBtn.Position = UDim2.new(0.5, -27.5, 0, 50)
 LogoBtn.BackgroundColor3 = MAIN_BG
 LogoBtn.Text = "A"
 LogoBtn.TextColor3 = ACCENT
@@ -65,7 +68,7 @@ local StyleScroll = Instance.new("ScrollingFrame")
 StyleScroll.Size = UDim2.new(1, -20, 1, -130)
 StyleScroll.Position = UDim2.new(0, 10, 0, 55)
 StyleScroll.BackgroundTransparency = 1
-StyleScroll.CanvasSize = UDim2.new(0, 0, 0, 650)
+StyleScroll.CanvasSize = UDim2.new(0, 0, 0, 550)
 StyleScroll.ScrollBarThickness = 0
 StyleScroll.Parent = Sidebar
 Instance.new("UIListLayout", StyleScroll).Padding = UDim.new(0, 6)
