@@ -9,6 +9,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "Anil_Elite_V5_6"
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
 
 -- ★ STYLES TABLE ★ (25 PERFECT FONTS - ALL FIXED)
 local Styles = {
@@ -33,7 +34,7 @@ local MAIN_BG = Color3.fromRGB(10, 10, 15)
 -- 🎡 LOGO
 local LogoBtn = Instance.new("TextButton")
 LogoBtn.Size = UDim2.new(0, 55, 0, 55)
-LogoBtn.Position = UDim2.new(0.5, -27.5, 0, 50)
+LogoBtn.Position = UDim2.new(0.5, -27.5, 0, 100)
 LogoBtn.BackgroundColor3 = MAIN_BG
 LogoBtn.Text = "A"
 LogoBtn.TextColor3 = ACCENT
@@ -279,42 +280,65 @@ CycleBtn.MouseButton1Click:Connect(function()
     SetCycle(not cycleActive)
     CycleBtn.Text = cycleActive and "AUTO CYCLE: ON" or "AUTO CYCLE: OFF"
     CycleBtn.TextColor3 = cycleActive and ACCENT or Color3.new(1,1,1)
-end)local UIS = UserInputService
+end)
+-- ★ UNIVERSAL DRAG & TOGGLE (PC & MOBILE FIXED) ★
+local UIS = game:GetService("UserInputService")
 
-local function Drag(obj)
-    local drag, start, startPos
-    obj.InputBegan:Connect(function(i) 
-        if i.UserInputType == Enum.UserInputType.MouseButton1 then 
-            drag = true 
-            start = i.Position 
-            startPos = obj.Position 
-        end 
+local function MakeDraggable(obj)
+    local dragging, dragInput, dragStart, startPos
+
+    obj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = obj.Position
+
+            -- Ensure drag stops even if mouse/finger leaves the object
+            local releaseConn
+            releaseConn = UIS.InputEnded:Connect(function(endInput)
+                if endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch then
+                    dragging = false
+                    releaseConn:Disconnect()
+                end
+            end)
+        end
     end)
-    UIS.InputChanged:Connect(function(i) 
-        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then 
-            local delta = i.Position - start
-            obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end 
+
+    obj.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
     end)
-    UIS.InputEnded:Connect(function(i) 
-        if i.UserInputType == Enum.UserInputType.MouseButton1 then 
-            drag = false 
-        end 
+
+    UIS.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            obj.Position = UDim2.new(
+                startPos.X.Scale, 
+                startPos.X.Offset + delta.X, 
+                startPos.Y.Scale, 
+                startPos.Y.Offset + delta.Y
+            )
+        end
     end)
 end
 
-Drag(MainFrame)
-Drag(LogoBtn)
-LogoBtn.MouseButton1Click:Connect(function() 
-    MainFrame.Visible = not MainFrame.Visible 
+-- Apply dragging to both the Main Menu and the Logo
+MakeDraggable(MainFrame)
+MakeDraggable(LogoBtn)
+
+-- ★ RELIABLE TOGGLE ★
+-- Using .Activated because it works better for taps on mobile than MouseButton1Click
+LogoBtn.Activated:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
 end)
 
-
+-- ★ APPLY TO SERVER ★
 ApplyBtn.MouseButton1Click:Connect(function()
     pcall(function()
         ReplicatedStorage.RE["1RPNam1eTex1t"]:FireServer("RolePlayName", PreviewLabel.Text)
     end)
 end)
 
+-- ★ LIVE REFRESH ★
 NameInput:GetPropertyChangedSignal("Text"):Connect(refresh)
-
